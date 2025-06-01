@@ -6,12 +6,14 @@ import {
   Put, 
   Delete, 
   Param, 
+  Query,
   HttpCode, 
-  HttpStatus 
+  HttpStatus
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { User } from './schemas/user.schema';
+import { PaginatedResponse } from '../common/interfaces/api-response.interface';
 
 @Controller('users')
 export class UsersController {
@@ -24,7 +26,18 @@ export class UsersController {
   }
 
   @Get()
-  async getAllUsers(): Promise<User[]> {
+  async getUsers(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ): Promise<User[] | PaginatedResponse<User>> {
+    // If pagination parameters are provided, return paginated response
+    if (page || limit) {
+      const pageNum = parseInt(page || '1', 10);
+      const limitNum = parseInt(limit || '10', 10);
+      return this.usersService.getUsersPaginated(pageNum, limitNum);
+    }
+    
+    // Otherwise return all users
     return this.usersService.getAllUsers();
   }
 
