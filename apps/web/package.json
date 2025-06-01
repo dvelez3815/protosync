@@ -1,0 +1,31 @@
+{
+  "name": "@proto-sync/web",
+  "version": "0.0.1",
+  "description": "Proto Sync Frontend",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0",
+    "astro": "astro",
+    "lint": "eslint \"src/**/*.{js,ts,astro}\" --fix"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "@astrojs/tailwind": "^5.0.0",
+    "@astrojs/react": "^3.0.0",
+    "@astrojs/node": "^8.0.0",
+    "tailwindcss": "^3.4.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "axios": "^1.6.0",
+    "@proto-sync/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "eslint": "^9.18.0",
+    "eslint-plugin-astro": "^0.29.0"
+  }
+}

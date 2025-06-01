@@ -1,0 +1,102 @@
+version: '3.8'
+
+services:
+  # Backend API - Development
+  server:
+    build:
+      context: ..
+      dockerfile: apps/server/Dockerfile
+      target: base
+    container_name: proto-sync-server-dev
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - MONGODB_URI=mongodb://admin:password123@mongodb:27017/proto-sync-db?authSource=admin
+      - MONGODB_USER=admin
+      - MONGODB_PASSWORD=password123
+      - MONGODB_DATABASE=proto-sync-db
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - ../logs:/app/logs
+    command: pnpm --filter @proto-sync/server run start:debug
+
+  # Frontend Web - Development
+  web:
+    build:
+      context: ..
+      dockerfile: apps/web/Dockerfile
+      target: base
+    container_name: proto-sync-web-dev
+    ports:
+      - "4321:4321"
+    environment:
+      - NODE_ENV=development
+      - API_URL=http://localhost:3000
+    depends_on:
+      - server
+    restart: unless-stopped
+    networks:
+      - app-network
+    volumes:
+      - ..:/app
+      - /app/node_modules
+    command: pnpm --filter @proto-sync/web run dev
+
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: proto-sync-mongodb-dev
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password123
+      - MONGO_INITDB_DATABASE=proto-sync-db
+    volumes:
+      - mongodb_dev_data:/data/db
+      - ../mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # MongoDB Express
+  mongo-express:
+    image: mongo-express:1.0.2-20
+    container_name: proto-sync-mongo-express-dev
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password123
+      - ME_CONFIG_MONGODB_URL=mongodb://admin:password123@mongodb:27017/
+      - ME_CONFIG_BASICAUTH=false
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - app-network
+
+volumes:
+  mongodb_dev_data:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

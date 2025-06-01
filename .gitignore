@@ -1,7 +1,19 @@
-# compiled output
-/dist
-/node_modules
-/build
+# Dependencies
+node_modules/
+**/node_modules/
+.pnpm-store/
+
+# Compiled output
+dist/
+**/dist/
+build/
+**/build/
+.next/
+**/.next/
+.nuxt/
+**/.nuxt/
+.output/
+**/.output/
 
 # Logs
 logs
@@ -11,22 +23,29 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+**/logs/
+**/*.log
 
 # OS
 .DS_Store
+Thumbs.db
 
 # Tests
-/coverage
-/.nyc_output
+coverage/
+**/coverage/
+.nyc_output/
+**/.nyc_output/
+*.lcov
 
 # IDEs and editors
-/.idea
+.idea/
 .project
 .classpath
 .c9/
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
 
 # IDE - VSCode
 .vscode/*
@@ -35,20 +54,59 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# dotenv environment variable files
+# Environment variables
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+.env.*
+!.env.example
+**/env
+**/.env
+**/.env.*
+!**/.env.example
 
-# temp directory
-.temp
-.tmp
+# Temporary directories
+.temp/
+.tmp/
+**/temp/
+**/.temp/
+**/.tmp/
 
 # Runtime data
 pids
 *.pid
+*.seed
+*.pid.lock
+
+# Docker
+.dockerignore
+**/Dockerfile.tmp
+docker-compose.override.yml
+
+# Astro specific
+.astro/
+**/.astro/
+
+# NestJS specific
+.nest-cli.json.bak
+
+# Package manager lockfiles (keep pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+
+# Cache directories
+.cache/
+**/.cache/
+.parcel-cache/
+**/.parcel-cache/
+.turbo/
+**/.turbo/
+
+# TypeScript
+*.tsbuildinfo
+**/*.tsbuildinfo
+
+# ESLint
+.eslintcache
+**/.eslintcache
 *.seed
 *.pid.lock
 
