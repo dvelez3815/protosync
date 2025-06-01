@@ -6,7 +6,7 @@ const UserList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [newUser, setNewUser] = useState<CreateUserDto>({ name: '', email: '' });
+  const [newUser, setNewUser] = useState<CreateUserDto>({ name: '', email: '', age: 0 });
   const [isCreating, setIsCreating] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
@@ -30,12 +30,12 @@ const UserList: React.FC = () => {
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newUser.name || !newUser.email) return;
+    if (!newUser.name || !newUser.email || newUser.age <= 0) return;
 
     try {
       setIsCreating(true);
       await apiService.createUser(newUser);
-      setNewUser({ name: '', email: '' });
+      setNewUser({ name: '', email: '', age: 0 });
       await fetchUsers();
       setError(null);
     } catch (err) {
@@ -70,7 +70,8 @@ const UserList: React.FC = () => {
     try {
       await apiService.updateUser(editingUser._id, {
         name: editingUser.name,
-        email: editingUser.email
+        email: editingUser.email,
+        age: editingUser.age
       });
       setEditingUser(null);
       await fetchUsers();
@@ -110,7 +111,7 @@ const UserList: React.FC = () => {
       {/* Create User Form */}
       <div className="bg-white rounded-xl shadow-lg p-6 mb-8 border border-gray-100">
         <h2 className="text-2xl font-bold mb-6 text-gray-800">Add New User</h2>
-        <form onSubmit={handleCreateUser} className="grid md:grid-cols-3 gap-4">
+        <form onSubmit={handleCreateUser} className="grid md:grid-cols-4 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
             <input
@@ -129,6 +130,19 @@ const UserList: React.FC = () => {
               placeholder="Enter email address"
               value={newUser.email}
               onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Age</label>
+            <input
+              type="number"
+              placeholder="Enter age"
+              min="0"
+              max="120"
+              value={newUser.age || ''}
+              onChange={(e) => setNewUser({ ...newUser, age: parseInt(e.target.value) || 0 })}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
@@ -182,7 +196,7 @@ const UserList: React.FC = () => {
             {users.map((user, index) => (
               <div key={user._id} className="p-6 hover:bg-gray-50 transition-colors duration-200">
                 {editingUser?._id === user._id ? (
-                  <form onSubmit={handleUpdateUser} className="grid md:grid-cols-4 gap-4 items-end">
+                  <form onSubmit={handleUpdateUser} className="grid md:grid-cols-5 gap-4 items-end">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                       <input
@@ -199,6 +213,18 @@ const UserList: React.FC = () => {
                         type="email"
                         value={editingUser.email}
                         onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                      <input
+                        type="number"
+                        min="0"
+                        max="120"
+                        value={editingUser.age}
+                        onChange={(e) => setEditingUser({ ...editingUser, age: parseInt(e.target.value) || 0 })}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
                       />
@@ -230,6 +256,7 @@ const UserList: React.FC = () => {
                       <div>
                         <h3 className="font-semibold text-gray-900 text-lg">{user.name}</h3>
                         <p className="text-gray-600">{user.email}</p>
+                        <p className="text-gray-500 text-sm">Age: {user.age} years old</p>
                         <div className="flex items-center space-x-4 mt-1">
                           <span className="text-sm text-gray-500">
                             Created: {new Date(user.createdAt).toLocaleDateString()}

@@ -4,6 +4,7 @@ import {
   Get, 
   Post, 
   Put, 
+  Patch,
   Delete, 
   Param, 
   Query,
@@ -48,6 +49,14 @@ export class UsersController {
 
   @Put(':id')
   async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    return this.usersService.updateUser(id, updateUserDto);
+  }
+
+  @Patch(':id')
+  async patchUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
