@@ -113,7 +113,7 @@ EOF
     fi
     
     print_info "Starting containers..."
-    docker-compose -f docker-compose.dev.yml up --build -d
+    docker compose -f docker-compose.dev.yml up --build -d
     
     print_status "Development environment started!"
     echo ""
@@ -152,7 +152,7 @@ EOF
     fi
     
     print_info "Building and starting production containers..."
-    docker-compose up --build -d
+    docker compose up --build -d
     
     print_status "Production environment started!"
     echo ""
@@ -171,10 +171,10 @@ stop_containers() {
     cd "$(dirname "$0")/../docker" || exit 1
     
     print_info "Stopping development containers..."
-    docker-compose -f docker-compose.dev.yml down
+    docker compose -f docker-compose.dev.yml down
     
     print_info "Stopping production containers..."
-    docker-compose down
+    docker compose down
     
     print_status "All containers stopped!"
 }
@@ -185,8 +185,8 @@ clean_up() {
     cd "$(dirname "$0")/../docker" || exit 1
     
     print_info "Stopping and removing containers with volumes..."
-    docker-compose -f docker-compose.dev.yml down -v
-    docker-compose down -v
+    docker compose -f docker-compose.dev.yml down -v
+    docker compose down -v
     
     print_info "Cleaning Docker system..."
     docker system prune -f
@@ -204,10 +204,10 @@ build_images() {
     cd "$(dirname "$0")/../docker" || exit 1
     
     print_info "Building development images..."
-    docker-compose -f docker-compose.dev.yml build --no-cache
+    docker compose -f docker-compose.dev.yml build --no-cache
     
     print_info "Building production images..."
-    docker-compose build --no-cache
+    docker compose build --no-cache
     
     print_status "Images built successfully!"
 }
@@ -262,9 +262,9 @@ show_logs() {
             ;;
         5)
             if docker ps | grep -q proto-sync-.*-dev; then
-                docker-compose -f docker-compose.dev.yml logs -f
+                docker compose -f docker-compose.dev.yml logs -f
             else
-                docker-compose logs -f
+                docker compose logs -f
             fi
             ;;
         *)
