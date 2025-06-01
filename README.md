@@ -1,98 +1,271 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+## 🛠️ Installation and Configuration
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
+### 1. Clone the repository
 
 ```bash
-$ pnpm install
+git clone <repository-url>
+cd proto-sync
 ```
 
-## Compile and run the project
+### 2. Configure environment variables
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+Edit the `.env` file according to your needs.
+
+### 3. Run with Docker
+
+#### Development Environment (with hot reload)
 
 ```bash
-# unit tests
-$ pnpm run test
+# Using the management script
+./docker.sh dev
 
-# e2e tests
-$ pnpm run test:e2e
+# Or using pnpm
+pnpm run docker:dev
 
-# test coverage
-$ pnpm run test:cov
+# Or using docker-compose directly
+docker-compose -f docker-compose.dev.yml up --build -d
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+#### Production Environment
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Using the management script
+./docker.sh prod
+
+# Or using pnpm
+pnpm run docker:prod
+
+# Or using docker-compose directly
+docker-compose up --build -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 📖 Available Services
 
-## Resources
+| Service | Port | Description |
+|---------|------|-------------|
+| NestJS Application | 3000 | Main API |
+| MongoDB | 27018 | Database |
+| MongoDB Express | 8081 | MongoDB web interface |
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🔧 Docker Commands
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Management Script (`./docker.sh`)
 
-## Support
+```bash
+./docker.sh dev      # Start development environment
+./docker.sh prod     # Start production environment
+./docker.sh stop     # Stop all containers
+./docker.sh clean    # Clean containers and volumes
+./docker.sh build    # Build Docker image
+./docker.sh logs     # View application logs
+./docker.sh mongo    # Open MongoDB shell
+./docker.sh help     # Show help
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### pnpm Scripts
 
-## Stay in touch
+```bash
+pnpm run docker:dev     # Development
+pnpm run docker:prod    # Production
+pnpm run docker:stop    # Stop
+pnpm run docker:clean   # Clean
+pnpm run docker:build   # Build
+pnpm run docker:logs    # View logs
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🌐 API Endpoints
 
-## License
+### Health Check
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```http
+GET /health
+```
+
+### Users
+
+```http
+GET    /users           # Get all users
+POST   /users           # Create user
+GET    /users/:id       # Get user by ID
+PUT    /users/:id       # Update user
+DELETE /users/:id       # Delete user
+GET    /users/email/:email # Get user by email
+```
+
+### User creation example
+
+```bash
+curl -X POST http://localhost:3000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "age": 30,
+    "tags": ["developer", "nodejs"]
+  }'
+```
+
+## 🗄️ Database Schema
+
+### User
+
+```javascript
+{
+  _id: ObjectId,
+  name: String,        // Required
+  email: String,       // Required, unique
+  age: Number,         // Required, 0-120
+  isActive: Boolean,   // Default: true
+  tags: [String],      // Array of tags
+  createdAt: Date,     // Automatic
+  updatedAt: Date      // Automatic
+}
+```
+
+## 🛠️ Local Development (without Docker)
+
+If you prefer to develop without Docker:
+
+### 1. Install dependencies
+
+```bash
+pnpm install
+```
+
+### 2. Run MongoDB locally
+
+```bash
+# With Docker only for MongoDB
+docker run -d --name proto-sync-mongo \
+  -p 27018:27017 \
+  -e MONGO_INITDB_ROOT_USERNAME=admin \
+  -e MONGO_INITDB_ROOT_PASSWORD=password123 \
+  mongo:7.0
+```
+
+### 3. Update .env for local development
+
+```env
+MONGODB_URI=mongodb://admin:password123@localhost:27018/proto-sync-db
+```
+
+### 4. Run the application
+
+```bash
+pnpm run start:dev
+```
+
+## 📚 Project Structure
+
+```
+proto-sync/
+├── src/
+│   ├── database/           # Database module
+│   ├── health/            # Health checks
+│   ├── user/              # User module
+│   │   ├── dto/           # Data Transfer Objects
+│   │   ├── schemas/       # MongoDB schemas
+│   │   ├── users.controller.ts
+│   │   ├── users.service.ts
+│   │   └── user.module.ts
+│   ├── app.module.ts      # Main module
+│   └── main.ts           # Entry point
+├── docker-compose.yml     # Production
+├── docker-compose.dev.yml # Development
+├── Dockerfile            # Application image
+├── docker.sh             # Management script
+└── mongo-init.js         # MongoDB initialization
+```
+
+## 🔍 Monitoring and Logs
+
+### View logs in real time
+
+```bash
+./docker.sh logs
+```
+
+### Access MongoDB Express
+
+Visit [http://localhost:8081](http://localhost:8081) to manage the database.
+
+### Health Check
+
+```bash
+curl http://localhost:3000/health
+```
+
+## 🚨 Troubleshooting
+
+### Problem: Port in use
+
+```bash
+# Check processes using the port
+lsof -i :3000
+lsof -i :27018
+
+# Stop conflicting services
+./docker.sh stop
+```
+
+### Change ports if there are conflicts
+
+If you need to change ports due to conflicts:
+
+1. **For MongoDB**: Edit the `docker-compose.yml` and `docker-compose.dev.yml` files
+   ```yaml
+   ports:
+     - "27019:27017"  # Change 27018 to another available port
+   ```
+
+2. **For the application**: Edit the `.env` file
+   ```env
+   PORT=3001  # Change to another available port
+   ```
+
+3. **Update environment variables** in the corresponding docker-compose files.
+
+### Problem: Corrupted volumes
+
+```bash
+# Clean completely
+./docker.sh clean
+
+# Restart
+./docker.sh dev
+```
+
+### Problem: Docker permissions
+
+```bash
+# On Linux, ensure Docker permissions
+sudo usermod -aG docker $USER
+# Then restart session
+```
+
+## 📝 Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Application port | `3000` |
+| `NODE_ENV` | Runtime environment | `development` |
+| `MONGODB_URI` | MongoDB connection URI | `mongodb://mongodb:27018/proto-sync-db` |
+| `MONGODB_USER` | MongoDB user | `admin` |
+| `MONGODB_PASSWORD` | MongoDB password | `password123` |
+| `MONGODB_DATABASE` | Database name | `proto-sync-db` |
+
+## 🤝 Contributing
+
+1. Fork the project
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is under the UNLICENSED License - see the [LICENSE](LICENSE) file for details.
